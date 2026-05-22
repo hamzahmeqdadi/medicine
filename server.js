@@ -9,30 +9,25 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// مسار الصفحة الرئيسية
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// المسار الجديد للذكاء الاصطناعي
 app.post('/ask-ai', async (req, res) => {
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
 
     if (!GEMINI_KEY) {
-        console.error('API Key missing');
         return res.status(500).json({ error: 'مفتاح GEMINI_API_KEY غير موجود في إعدادات الخادم.' });
     }
 
     try {
         const genAI = new GoogleGenerativeAI(GEMINI_KEY);
-        // نستخدم الموديل السريع والفعال للمحادثات
+        
+        // --- هذا السطر هو التصحيح الجوهري ---
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // نأخذ آخر رسالة من المستخدم
         const messages = req.body.messages;
         const lastMessage = messages[messages.length - 1].content;
-        
-        // إعداد السياق الطبي للمساعد
         const systemPrompt = "أنت مساعد طبي تثقيفي. قدم معلومات طبية عامة ولا تقدم تشخيصاً. في حالات الطوارئ اطلب التوجه للطوارئ. ";
         
         const result = await model.generateContent(systemPrompt + lastMessage);
@@ -46,7 +41,6 @@ app.post('/ask-ai', async (req, res) => {
     }
 });
 
-// Health check
 app.get('/ping', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 3000;
