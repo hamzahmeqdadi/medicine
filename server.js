@@ -17,7 +17,7 @@ app.post('/ask-ai', async (req, res) => {
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
 
     if (!GEMINI_KEY) {
-        return res.status(500).json({ error: 'مفتاح API مفقود.' });
+        return res.status(500).json({ error: 'مفتاح API غير موجود.' });
     }
 
     try {
@@ -25,22 +25,24 @@ app.post('/ask-ai', async (req, res) => {
         const lastMessage = messages[messages.length - 1].content;
         const systemPrompt = "أنت مساعد طبي تثقيفي. قدم معلومات طبية عامة ولا تقدم تشخيصاً. في حالات الطوارئ اطلب التوجه للطوارئ. ";
 
-        // الاتصال المباشر بـ Google Gemini API
-        const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,
-            {
-                contents: [{ parts: [{ text: systemPrompt + lastMessage }] }]
-            }
-        );
+        // استخدام المسار المباشر لـ API بدون بادئة models/ في العنوان لضمان التوافق
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+        
+        const response = await axios.post(url, {
+            contents: [{ parts: [{ text: systemPrompt + lastMessage }] }]
+        });
 
         const reply = response.data.candidates[0].content.parts[0].text;
         res.json({ content: [{ text: reply }] });
 
     } catch (error) {
-        console.error('API Error:', error.response?.data || error.message);
+        // طباعة تفاصيل الخطأ لسهولة التشخيص
+        console.error('API Error Details:', error.response?.data?.error || error.message);
         res.status(500).json({ error: 'خطأ في الاتصال بالذكاء الاصطناعي' });
     }
 });
+
+app.get('/ping', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
