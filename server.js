@@ -16,26 +16,23 @@ app.post('/ask-ai', async (req, res) => {
     try {
         const messages = req.body.messages;
         const lastMessage = messages[messages.length - 1].content;
-        const systemPrompt = "أنت مساعد طبي. أجب باختصار.";
-
-        // 1. الاستعلام عن قائمة الموديلات المتاحة في حسابك
-        const modelsResponse = await axios.get(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_KEY}`);
         
-        // 2. اختيار موديل يدعم generateContent
-        const validModel = modelsResponse.data.models.find(m => m.supportedMethods.includes('generateContent'));
-        const modelName = validModel.name; // هذا سيجلب الاسم الصحيح والمقبول من جوجل
-
-        // 3. إرسال الطلب باستخدام الموديل المكتشف
-        const response = await axios.post(`https://generativelanguage.googleapis.com/v1beta/${modelName}:generateContent?key=${GEMINI_KEY}`, {
-            contents: [{ parts: [{ text: systemPrompt + lastMessage }] }]
+        // نستخدم الموديل القياسي والمباشر
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+        
+        const response = await axios.post(url, {
+            contents: [{ parts: [{ text: "أنت مساعد طبي. " + lastMessage }] }]
         });
 
-        res.json({ content: [{ text: response.data.candidates[0].content.parts[0].text }] });
+        // التأكد من وجود الرد قبل إرساله
+        const text = response.data.candidates[0].content.parts[0].text;
+        res.json({ content: [{ text: text }] });
 
     } catch (error) {
-        console.error('Error Details:', error.response?.data?.error || error.message);
-        res.status(500).json({ error: 'تعذر الاتصال بالموديل الصحيح' });
+        // طباعة تفاصيل الخطأ بدقة
+        console.error('Final Error Check:', error.response?.data?.error?.message || error.message);
+        res.status(500).json({ error: 'خطأ في الاتصال' });
     }
 });
 
-app.listen(3000, () => console.log('Server running on 3000'));
+app.listen(3000, () => console.log('Server running on port 3000'));
