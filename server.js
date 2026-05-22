@@ -1,28 +1,32 @@
 const express = require('express');
-const pool = require('./db'); // استيراد الاتصال من ملف db.js
+const pool = require('./db');
 const app = express();
 
-app.use(express.json());
+app.use(express.json()); // ضروري لقراءة البيانات المرسلة
 
-// الصفحة الرئيسية
-app.get('/', (req, res) => {
-  res.send('السيرفر يعمل بنجاح ومربوط بقاعدة البيانات!');
+// 1. عرض كل الأدوية
+app.get('/medicines', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM medicines');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// مسار تجريبي للتأكد من أن قاعدة البيانات ترد علينا
-app.get('/test-db', async (req, res) => {
+// 2. إضافة دواء جديد
+app.post('/medicines', async (req, res) => {
+  const { name, price, stock } = req.body;
   try {
-    const result = await pool.query('SELECT NOW()');
-    res.json({
-      message: "تم الاتصال بنجاح!",
-      currentTime: result.rows[0].now
-    });
+    const newMed = await pool.query(
+      'INSERT INTO medicines (name, price, stock) VALUES ($1, $2, $3) RETURNING *',
+      [name, price, stock]
+    );
+    res.json(newMed.rows[0]);
   } catch (err) {
-    res.status(500).json({ error: "فشل الاتصال بقاعدة البيانات", details: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
