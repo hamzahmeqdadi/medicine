@@ -25,8 +25,8 @@ app.post('/ask-ai', async (req, res) => {
     try {
         const genAI = new GoogleGenerativeAI(GEMINI_KEY);
         
-        // تم تغيير الموديل إلى gemini-1.5-pro لضمان التوافق التام
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
+        // تعديل المسار ليحتوي على كلمة models/ لضمان التعرف عليه من قبل المكتبة
+        const model = genAI.getGenerativeModel({ model: "models/gemini-1.5-pro-latest" });
 
         const messages = req.body.messages;
         const lastMessage = messages[messages.length - 1].content;
