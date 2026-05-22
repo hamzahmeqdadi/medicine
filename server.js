@@ -9,10 +9,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
+// مسار الصفحة الرئيسية
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+// المسار الذكي للذكاء الاصطناعي
 app.post('/ask-ai', async (req, res) => {
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
 
@@ -23,8 +25,8 @@ app.post('/ask-ai', async (req, res) => {
     try {
         const genAI = new GoogleGenerativeAI(GEMINI_KEY);
         
-        // --- هذا السطر هو التصحيح الجوهري ---
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        // تم تغيير الموديل إلى gemini-1.5-pro لضمان التوافق التام
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
 
         const messages = req.body.messages;
         const lastMessage = messages[messages.length - 1].content;
