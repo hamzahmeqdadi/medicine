@@ -9,37 +9,33 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 app.post('/ask-ai', async (req, res) => {
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
-
-    if (!GEMINI_KEY) {
-        return res.status(500).json({ error: 'مفتاح API غير موجود.' });
-    }
+    if (!GEMINI_KEY) return res.status(500).json({ error: 'API Key missing' });
 
     try {
         const messages = req.body.messages;
         const lastMessage = messages[messages.length - 1].content;
-        const systemPrompt = "أنت مساعد طبي تثقيفي. قدم معلومات طبية عامة ولا تقدم تشخيصاً. في حالات الطوارئ اطلب التوجه للطوارئ. ";
+        const systemPrompt = "أنت مساعد طبي. أجب باختصار.";
 
-        // استخدام gemini-pro بدلاً من gemini-1.5-flash
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`;
+        // 1. الاستعلام عن قائمة الموديلات المتاحة في حسابك
+        const modelsResponse = await axios.get(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_KEY}`);
         
-        const response = await axios.post(url, {
+        // 2. اختيار موديل يدعم generateContent
+        const validModel = modelsResponse.data.models.find(m => m.supportedMethods.includes('generateContent'));
+        const modelName = validModel.name; // هذا سيجلب الاسم الصحيح والمقبول من جوجل
+
+        // 3. إرسال الطلب باستخدام الموديل المكتشف
+        const response = await axios.post(`https://generativelanguage.googleapis.com/v1beta/${modelName}:generateContent?key=${GEMINI_KEY}`, {
             contents: [{ parts: [{ text: systemPrompt + lastMessage }] }]
         });
 
-        const reply = response.data.candidates[0].content.parts[0].text;
-        res.json({ content: [{ text: reply }] });
+        res.json({ content: [{ text: response.data.candidates[0].content.parts[0].text }] });
 
     } catch (error) {
-        console.error('API Error Details:', error.response?.data?.error || error.message);
-        res.status(500).json({ error: 'خطأ في الاتصال بالذكاء الاصطناعي' });
+        console.error('Error Details:', error.response?.data?.error || error.message);
+        res.status(500).json({ error: 'تعذر الاتصال بالموديل الصحيح' });
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(3000, () => console.log('Server running on 3000'));
