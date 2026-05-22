@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const pool = require('./db');
 const app = express();
 
 app.use(express.json()); // ضروري لقراءة البيانات المرسلة
+app.use(cors());
 
 // 1. عرض كل الأدوية
 app.get('/medicines', async (req, res) => {
