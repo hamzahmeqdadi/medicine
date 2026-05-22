@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صحتك — بوابتك الطبية الموثوقة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f0f7f4;
+  --bg2:#e6f2ed;
+  --white:#ffffff;
+  --primary:#0d6e4f;
+  --primary-light:#1a9b6e;
+  --primary-pale:#d4ede5;
+  --accent:#e8472a;
+  --dark:#0a1f17;
+  --text:#1a2e24;
+  --muted:#6b8a7a;
+  --border:#c8ddd6;
+  --card:#ffffff;
+  --shadow:0 2px 20px rgba(13,110,79,0.08);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 5%;
+  background:rgba(240,247,244,0.92);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.logo{font-size:1.5rem;font-weight:900;color:var(--primary);text-decoration:none;letter-spacing:-1px}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;font-weight:600;transition:color 0.2s}
+.nav-links a:hover{color:var(--primary)}
+.nav-cta{
+  background:var(--primary);color:#fff !important;
+  padding:0.5rem 1.4rem;border-radius:100px;
+  font-weight:700 !important;transition:background 0.2s,transform 0.2s !important;
+}
+.nav-cta:hover{background:var(--primary-light) !important;transform:translateY(-1px)}
+
+/* HERO */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:0 5%;padding-top:80px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(160deg,#e8f5ef 0%,#f0f7f4 60%,#fdf6f4 100%);
+}
+.hero-circles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.circle{
+  position:absolute;border-radius:50%;
+  background:rgba(13,110,79,0.06);
+}
+.circle-1{width:600px;height:600px;top:-200px;left:-200px}
+.circle-2{width:400px;height:400px;bottom:-100px;right:-100px;background:rgba(232,71,42,0.04)}
+.circle-3{width:200px;height:200px;top:40%;right:20%;background:rgba(13,110,79,0.08)}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  background:var(--primary-pale);border:1px solid rgba(13,110,79,0.2);
+  color:var(--primary);font-size:0.82rem;font-weight:700;
+  padding:0.4rem 1.1rem;border-radius:100px;
+  margin-bottom:1.8rem;width:fit-content;
+}
+.badge-dot{width:8px;height:8px;background:var(--primary-light);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+
+h1{
+  font-size:clamp(2.5rem,5.5vw,5rem);font-weight:900;
+  line-height:1.1;letter-spacing:-2px;
+  margin-bottom:1.5rem;max-width:750px;color:var(--dark);
+}
+h1 em{font-style:normal;color:var(--primary)}
+h1 .red{color:var(--accent)}
+
+.hero-desc{
+  font-size:1.1rem;color:var(--muted);max-width:520px;
+  line-height:1.9;margin-bottom:2.5rem;
+  font-family:'Tajawal',sans-serif;font-weight:400;
+}
+
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem}
+.btn-green{
+  background:var(--primary);color:#fff;
+  padding:0.9rem 2rem;border-radius:100px;
+  font-size:0.95rem;font-weight:700;text-decoration:none;
+  transition:background 0.2s,transform 0.2s,box-shadow 0.2s;
+  font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:0.5rem;
+}
+.btn-green:hover{background:var(--primary-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,110,79,0.25)}
+.btn-outline{
+  background:transparent;color:var(--primary);
+  padding:0.9rem 2rem;border-radius:100px;
+  font-size:0.95rem;font-weight:600;text-decoration:none;
+  border:1.5px solid var(--primary);
+  transition:background 0.2s;font-family:'Cairo',sans-serif;
+}
+.btn-outline:hover{background:var(--primary-pale)}
+
+.hero-trust{
+  display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;
+  padding-top:2rem;border-top:1px solid var(--border);
+}
+.trust-item{display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;color:var(--muted);font-family:'Tajawal',sans-serif}
+.trust-icon{font-size:1.1rem}
+
+/* WARNING BANNER */
+.warning-banner{
+  background:linear-gradient(135deg,#fff8e6,#fff3d4);
+  border:1px solid #f5c842;
+  border-radius:12px;
+  padding:1rem 1.5rem;
+  display:flex;align-items:flex-start;gap:1rem;
+  margin-top:2rem;max-width:680px;
+}
+.warning-icon{font-size:1.4rem;flex-shrink:0;margin-top:0.1rem}
+.warning-text{font-size:0.85rem;color:#7a5c00;line-height:1.6;font-family:'Tajawal',sans-serif}
+.warning-text strong{font-weight:700;color:#5a4000}
+
+/* AI CHAT SECTION */
+#ai-chat{
+  padding:5rem 5%;
+  background:var(--white);
+}
+.ai-header{text-align:center;margin-bottom:3rem}
+.section-badge{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:var(--primary-pale);color:var(--primary);
+  font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:0.35rem 1rem;border-radius:100px;margin-bottom:1rem;
+}
+h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-1px;color:var(--dark);line-height:1.15}
+.section-sub{font-size:1rem;color:var(--muted);margin-top:0.7rem;font-family:'Tajawal',sans-serif;line-height:1.7}
+
+.chat-container{
+  max-width:780px;margin:0 auto;
+  border-radius:20px;
+  border:1px solid var(--border);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+
+.chat-topbar{
+  background:linear-gradient(135deg,var(--primary),var(--primary-light));
+  padding:1.2rem 1.5rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.ai-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;flex-shrink:0;
+}
+.ai-name{font-weight:700;color:#fff;font-size:0.95rem}
+.ai-status{font-size:0.78rem;color:rgba(255,255,255,0.7);font-family:'Tajawal',sans-serif;margin-top:0.15rem}
+.status-dot{
+  display:inline-block;width:8px;height:8px;
+  background:#4ade80;border-radius:50%;margin-left:0.4rem;
+  animation:pulse 2s infinite;
+}
+
+.chat-messages{
+  min-height:380px;max-height:480px;
+  overflow-y:auto;padding:1.5rem;
+  background:#fafcfb;
+  display:flex;flex-direction:column;gap:1.2rem;
+  scroll-behavior:smooth;
+}
+.chat-messages::-webkit-scrollbar{width:4px}
+.chat-messages::-webkit-scrollbar-track{background:transparent}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+
+.msg{display:flex;gap:0.8rem;max-width:85%}
+.msg.user{flex-direction:row-reverse;margin-right:auto;margin-left:0;align-self:flex-end}
+.msg.bot{align-self:flex-start}
+
+.msg-avatar{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+}
+.msg.bot .msg-avatar{background:var(--primary-pale)}
+.msg.user .msg-avatar{background:var(--primary);color:#fff;font-size:0.8rem;font-weight:700}
+
+.msg-bubble{
+  padding:0.85rem 1.1rem;border-radius:16px;
+  font-size:0.9rem;line-height:1.7;
+  font-family:'Tajawal',sans-serif;
+}
+.msg.bot .msg-bubble{
+  background:var(--white);border:1px solid var(--border);
+  border-top-right-radius:4px;color:var(--text);
+}
+.msg.user .msg-bubble{
+  background:var(--primary);color:#fff;
+  border-top-left-radius:4px;
+}
+.msg-time{font-size:0.72rem;color:var(--muted);margin-top:0.3rem;text-align:left;padding:0 0.3rem}
+.msg.user .msg-time{text-align:right}
+
+.typing-indicator{
+  display:none;align-self:flex-start;
+  padding:0.85rem 1.1rem;background:var(--white);
+  border:1px solid var(--border);border-radius:16px;border-top-right-radius:4px;
+  gap:4px;align-items:center;
+}
+.typing-indicator.active{display:flex}
+.typing-dot{
+  width:7px;height:7px;background:var(--muted);border-radius:50%;
+  animation:typing 1.2s infinite;
+}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes typing{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+
+.chat-disclaimer{
+  background:#fffbeb;border-top:1px solid #fde68a;
+  padding:0.7rem 1.2rem;
+  font-size:0.78rem;color:#78716c;
+  font-family:'Tajawal',sans-serif;line-height:1.5;
+  display:flex;align-items:center;gap:0.5rem;
+}
+
+.chat-input-area{
+  background:var(--white);border-top:1px solid var(--border);
+  padding:1rem 1.2rem;
+  display:flex;flex-direction:column;gap:0.8rem;
+}
+
+.quick-questions{
+  display:flex;gap:0.5rem;flex-wrap:wrap;
+}
+.quick-btn{
+  background:var(--bg2);border:1px solid var(--border);
+  color:var(--primary);font-size:0.78rem;font-family:'Tajawal',sans-serif;
+  padding:0.35rem 0.85rem;border-radius:100px;cursor:pointer;
+  transition:background 0.2s,border-color 0.2s;white-space:nowrap;
+}
+.quick-btn:hover{background:var(--primary-pale);border-color:var(--primary)}
+
+.input-row{display:flex;gap:0.6rem}
+.chat-input{
+  flex:1;background:var(--bg);border:1.5px solid var(--border);
+  border-radius:100px;color:var(--text);
+  font-family:'Tajawal',sans-serif;font-size:0.9rem;
+  padding:0.75rem 1.2rem;outline:none;
+  transition:border-color 0.2s,background 0.2s;
+}
+.chat-input::placeholder{color:var(--muted)}
+.chat-input:focus{border-color:var(--primary);background:var(--white)}
+.send-btn{
+  background:var(--primary);color:#fff;border:none;
+  border-radius:50%;width:44px;height:44px;flex-shrink:0;
+  cursor:pointer;font-size:1.1rem;
+  transition:background 0.2s,transform 0.2s;
+  display:flex;align-items:center;justify-content:center;
+}
+.send-btn:hover{background:var(--primary-light);transform:scale(1.05)}
+.send-btn:disabled{background:var(--muted);cursor:not-allowed;transform:none}
+
+/* TOPICS */
+#topics{padding:5rem 5%;background:var(--bg)}
+.topics-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:1.2rem;margin-top:3rem;
+}
+.topic-card{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:16px;padding:1.8rem 1.5rem;
+  cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;
+  position:relative;overflow:hidden;
+}
+.topic-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(13,110,79,0.1);border-color:var(--primary)}
+.topic-card::before{
+  content:'';position:absolute;top:0;right:0;
+  width:60px;height:60px;
+  background:var(--primary-pale);border-radius:0 16px 0 60px;
+  transition:width 0.3s,height 0.3s;
+}
+.topic-card:hover::before{width:80px;height:80px}
+.topic-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.topic-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:0.4rem}
+.topic-desc{font-size:0.83rem;color:var(--muted);line-height:1.6;font-family:'Tajawal',sans-serif}
+.topic-arrow{
+  position:absolute;bottom:1.2rem;left:1.2rem;
+  color:var(--primary);font-size:0.8rem;font-weight:700;
+  opacity:0;transition:opacity 0.2s;
+}
+.topic-card:hover .topic-arrow{opacity:1}
+
+/* ARTICLES */
+#articles{padding:5rem 5%;background:var(--white)}
+.articles-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:1.5rem;margin-top:3rem;
+}
+.article-card{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.article-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.article-img{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;
+}
+.article-body{padding:1.5rem}
+.article-tag{
+  font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--primary);margin-bottom:0.6rem;
+  font-family:'Tajawal',sans-serif;
+}
+.article-title{font-size:1rem;font-weight:700;color:var(--dark);margin-bottom:0.5rem;line-height:1.4}
+.article-excerpt{font-size:0.83rem;color:var(--muted);line-height:1.6;font-family:'Tajawal',sans-serif}
+.article-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:1rem;padding-top:0.8rem;border-top:1px solid var(--border);
+}
+.article-read{font-size:0.78rem;color:var(--primary);font-weight:700;font-family:'Tajawal',sans-serif}
+.article-date{font-size:0.75rem;color:var(--muted);font-family:'Tajawal',sans-serif}
+
+/* SYMPTOMS CHECKER */
+#symptoms{
+  padding:5rem 5%;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-light) 100%);
+  color:#fff;
+}
+.symptoms-inner{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.symptoms-title .section-badge{background:rgba(255,255,255,0.15);color:#fff}
+.symptoms-title h2{color:#fff;margin-bottom:1rem}
+.symptoms-title p{color:rgba(255,255,255,0.75);font-family:'Tajawal',sans-serif;line-height:1.7}
+
+.symptoms-list{
+  display:flex;flex-direction:column;gap:0.8rem;margin-top:2rem;
+}
+.symptom-tag{
+  display:inline-flex;align-items:center;gap:0.6rem;
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+  color:#fff;padding:0.6rem 1rem;border-radius:10px;
+  font-size:0.85rem;font-family:'Tajawal',sans-serif;
+  cursor:pointer;transition:background 0.2s;width:fit-content;
+}
+.symptom-tag:hover{background:rgba(255,255,255,0.2)}
+
+.symptoms-card{
+  background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:20px;padding:2rem;
+}
+.symptoms-card h3{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:1.2rem}
+
+.sym-input-wrap{position:relative}
+.sym-input{
+  width:100%;background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);border-radius:10px;
+  color:#fff;font-family:'Tajawal',sans-serif;font-size:0.9rem;
+  padding:0.8rem 1rem;outline:none;
+  transition:border-color 0.2s;
+}
+.sym-input::placeholder{color:rgba(255,255,255,0.5)}
+.sym-input:focus{border-color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.2)}
+
+.sym-tags{display:flex;flex-wrap:wrap;gap:0.4rem;min-height:40px;margin-top:0.8rem}
+.sym-tag-item{
+  background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);
+  color:#fff;font-size:0.8rem;font-family:'Tajawal',sans-serif;
+  padding:0.25rem 0.8rem;border-radius:100px;
+  display:flex;align-items:center;gap:0.4rem;
+}
+.sym-remove{cursor:pointer;opacity:0.6;font-size:0.9rem;transition:opacity 0.2s}
+.sym-remove:hover{opacity:1}
+
+.btn-white{
+  background:#fff;color:var(--primary);border:none;
+  padding:0.85rem 2rem;border-radius:100px;
+  font-size:0.9rem;font-weight:700;cursor:pointer;
+  font-family:'Cairo',sans-serif;margin-top:1.2rem;width:100%;
+  transition:background 0.2s,transform 0.2s;
+}
+.btn-white:hover{background:var(--bg2);transform:translateY(-1px)}
+
+/* DOCTORS CTA */
+#doctors{padding:5rem 5%;background:var(--bg)}
+.doctors-inner{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:24px;padding:3.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:2rem;flex-wrap:wrap;
+}
+.doctors-text h2{margin-bottom:0.7rem}
+.doctors-text p{color:var(--muted);font-family:'Tajawal',sans-serif;line-height:1.7;max-width:500px}
+.doctors-btns{display:flex;gap:1rem;flex-wrap:wrap;flex-shrink:0}
+
+/* تنسيقات قسم الأدوية الجديد */
+.medicine-section { padding: 5rem 5%; background: #f9f9f9; }
+.med-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+.med-card { padding: 1.5rem; background: #ffffff; border: 1px solid #c8ddd6; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.med-card h3 { color: #0d6e4f; margin-bottom: 0.5rem; }
+
+/* FOOTER */
+footer{
+  background:var(--dark);color:rgba(255,255,255,0.7);
+  padding:3rem 5% 2rem;
+}
+.footer-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:2rem;
+  padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:1.5rem;
+}
+.footer-logo{font-size:1.3rem;font-weight:900;color:#fff;letter-spacing:-0.5px}
+.footer-logo span{color:#4ade80}
+.footer-tagline{font-size:0.83rem;margin-top:0.4rem;font-family:'Tajawal',sans-serif}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a{
+  color:rgba(255,255,255,0.5);text-decoration:none;
+  font-size:0.87rem;transition:color 0.2s;font-family:'Tajawal',sans-serif;
+}
+.footer-links a:hover{color:#fff}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:0.8rem;font-family:'Tajawal',sans-serif}
+.footer-disclaimer{
+  font-size:0.75rem;color:rgba(255,255,255,0.35);
+  font-family:'Tajawal',sans-serif;max-width:500px;line-height:1.5;margin-top:1rem;
+}
+
+/* FADE IN */
+.fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.5s,transform 0.5s}
+.fade-up.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav-links{display:none}
+  .symptoms-inner{grid-template-columns:1fr;gap:2.5rem}
+  .doctors-inner{flex-direction:column}
+  h1{letter-spacing:-1px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">صحتك<span>+</span></a>
+  <ul class="nav-links">
+    <li><a href="#ai-chat">المساعد الطبي</a></li>
+    <li><a href="#topics">المواضيع الطبية</a></li>
+    <li><a href="#articles">المقالات</a></li>
+    <li><a href="#symptoms">فاحص الأعراض</a></li>
+    <li><a href="#doctors" class="nav-cta">استشر طبيباً</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-circles" aria-hidden="true">
+    <div class="circle circle-1"></div>
+    <div class="circle circle-2"></div>
+    <div class="circle circle-3"></div>
+  </div>
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    منصة طبية موثوقة
+  </div>
+  <h1>معلومات طبية <em>موثوقة</em><br>في متناول يدك</h1>
+  <p class="hero-desc">
+    احصل على معلومات طبية شاملة ومساعدة من الذكاء الاصطناعي لفهم الأعراض والأمراض — مع التذكير الدائم بأن الطبيب لا يُعوَّض.
+  </p>
+  <div class="hero-btns">
+    <a href="#ai-chat" class="btn-green">🤖 ابدأ مع المساعد الطبي</a>
+    <a href="#topics" class="btn-outline">استعرض المواضيع</a>
+  </div>
+  <div class="hero-trust">
+    <div class="trust-item"><span class="trust-icon">✅</span> معلومات موثوقة ومراجعة</div>
+    <div class="trust-item"><span class="trust-icon">🔒</span> خاص ومحمي</div>
+    <div class="trust-item"><span class="trust-icon">🩺</span> لا يُغني عن الطبيب</div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> متاح 24/7</div>
+  </div>
+  <div class="warning-banner">
+    <div class="warning-icon">⚠️</div>
+    <div class="warning-text">
+      <strong>تنبيه مهم:</strong> المعلومات والمساعدة المقدمة هنا للأغراض التثقيفية فقط ولا تُعدّ تشخيصاً طبياً. في حالات الطوارئ أو الأعراض الحادة، يرجى التوجه فوراً لأقرب مستشفى أو الاتصال بالإسعاف.
+    </div>
+  </div>
+</section>
+
+<!-- AI CHAT -->
+<section id="ai-chat">
+  <div class="ai-header fade-up">
+    <div class="section-badge">🤖 مساعد طبي ذكي</div>
+    <h2>اسأل المساعد الطبي</h2>
+    <p class="section-sub">اطرح أسئلتك الطبية العامة واحصل على معلومات واضحة ومفيدة — مدعوم بالذكاء الاصطناعي</p>
+  </div>
+
+  <div class="chat-container fade-up">
+    <div class="chat-topbar">
+      <div class="ai-avatar">🩺</div>
+      <div>
+        <div class="ai-name">المساعد الطبي — صحتك+</div>
+        <div class="ai-status">متاح الآن <span class="status-dot"></span></div>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg bot">
+        <div class="msg-avatar">🩺</div>
+        <div>
+          <div class="msg-bubble">مرحباً! أنا مساعدك الطبي. يمكنني مساعدتك في فهم الأعراض والأمراض والمصطلحات الطبية وتقديم معلومات صحية عامة.<br><br>⚠️ تذكير: ما أقدمه معلومات عامة فقط وليس تشخيصاً. دائماً استشر طبيباً لحالتك الخاصة.</div>
+          <div class="msg-time">الآن</div>
+        </div>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    </div>
+
+    <div class="chat-disclaimer">
+      ⚠️ هذا المساعد يقدم معلومات طبية عامة فقط ولا يُغني عن استشارة طبيب متخصص.
+    </div>
+
+    <div class="chat-input-area">
+      <div class="quick-questions" id="quickQuestions">
+        <button class="quick-btn" onclick="sendQuick(this)">ما هو ضغط الدم الطبيعي؟</button>
+        <button class="quick-btn" onclick="sendQuick(this)">أعراض السكري</button>
+        <button class="quick-btn" onclick="sendQuick(this)">كيف أقوي مناعتي؟</button>
+        <button class="quick-btn" onclick="sendQuick(this)">متى أذهب للطوارئ؟</button>
+      </div>
+      <div class="input-row">
+        <input type="text" class="chat-input" id="chatInput"
+          placeholder="اكتب سؤالك الطبي هنا..."
+          onkeydown="if(event.key==='Enter')sendMessage()" />
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPICS -->
+<section id="topics">
+  <div class="fade-up" style="text-align:center">
+    <div class="section-badge">📚 مواضيع طبية</div>
+    <h2>استعرض حسب التخصص</h2>
+    <p class="section-sub">اختر مجال اهتمامك للحصول على معلومات تفصيلية</p>
+  </div>
+  <div class="topics-grid">
+    <div class="topic-card fade-up" onclick="askTopic('القلب والأوعية الدموية')">
+      <span class="topic-icon">❤️</span>
+      <div class="topic-title">القلب والأوعية</div>
+      <div class="topic-desc">معلومات عن أمراض القلب، ضغط الدم، الجلطات والوقاية منها</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('السكري وأمراض الغدد الصماء')">
+      <span class="topic-icon">🩸</span>
+      <div class="topic-title">السكري والغدد</div>
+      <div class="topic-desc">السكري بنوعيه، أمراض الغدة الدرقية والأدرينالية</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('صحة الجهاز الهضمي')">
+      <span class="topic-icon">🫁</span>
+      <div class="topic-title">الجهاز الهضمي</div>
+      <div class="topic-desc">الحموضة، القولون، الكبد والمرارة وما يتعلق بالهضم</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('صحة العظام والمفاصل')">
+      <span class="topic-icon">🦴</span>
+      <div class="topic-title">العظام والمفاصل</div>
+      <div class="topic-desc">الروماتيزم، هشاشة العظام، آلام الظهر والمفاصل</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('الصحة النفسية والذهنية')">
+      <span class="topic-icon">🧠</span>
+      <div class="topic-title">الصحة النفسية</div>
+      <div class="topic-desc">القلق والاكتئاب، التوتر، اضطرابات النوم والصحة الذهنية</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('الجهاز التنفسي والرئتين')">
+      <span class="topic-icon">🌬️</span>
+      <div class="topic-title">الجهاز التنفسي</div>
+      <div class="topic-desc">الربو، التهاب الرئة، الحساسية التنفسية والأمراض الرئوية</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('صحة الأطفال والأمومة')">
+      <span class="topic-icon">👶</span>
+      <div class="topic-title">صحة الأطفال</div>
+      <div class="topic-desc">تطور الطفل، التطعيمات، أمراض الأطفال الشائعة والأمومة</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+    <div class="topic-card fade-up" onclick="askTopic('التغذية الصحية والوزن')">
+      <span class="topic-icon">🥗</span>
+      <div class="topic-title">التغذية والوزن</div>
+      <div class="topic-desc">الحمية الصحية، التحكم في الوزن، الفيتامينات والمعادن</div>
+      <div class="topic-arrow">اسأل عنه ←</div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles">
+  <div class="fade-up" style="text-align:center">
+    <div class="section-badge">📰 مقالات صحية</div>
+    <h2>أحدث المقالات الطبية</h2>
+  </div>
+  <div class="articles-grid">
+    <div class="article-card fade-up">
+      <div class="article-img" style="background:linear-gradient(135deg,#d4ede5,#a8dbc9)">❤️</div>
+      <div class="article-body">
+        <div class="article-tag">القلب والأوعية</div>
+        <div class="article-title">7 عادات يومية تحمي قلبك من الأمراض</div>
+        <div class="article-excerpt">اكتشف كيف يمكن لتغييرات بسيطة في نمط حياتك أن تقلل خطر الإصابة بأمراض القلب بنسبة كبيرة.</div>
+        <div class="article-footer">
+          <span class="article-read">قراءة المقال ←</span>
+          <span class="article-date">منذ يومين</span>
+        </div>
+      </div>
+    </div>
+    <div class="article-card fade-up">
+      <div class="article-img" style="background:linear-gradient(135deg,#fef3c7,#fde68a)">🧠</div>
+      <div class="article-body">
+        <div class="article-tag">الصحة النفسية</div>
+        <div class="article-title">كيف تتعامل مع التوتر والقلق بشكل فعّال</div>
+        <div class="article-excerpt">تقنيات مجربة ومبنية على الأبحاث للتعامل مع ضغوط الحياة اليومية وتحسين جودة النوم.</div>
+        <div class="article-footer">
+          <span class="article-read">قراءة المقال ←</span>
+          <span class="article-date">منذ 4 أيام</span>
+        </div>
+      </div>
+    </div>
+    <div class="article-card fade-up">
+      <div class="article-img" style="background:linear-gradient(135deg,#ede9fe,#c4b5fd)">🩸</div>
+      <div class="article-body">
+        <div class="article-tag">السكري</div>
+        <div class="article-title">علامات السكري المبكرة التي يتجاهلها كثيرون</div>
+        <div class="article-excerpt">تعرف على الأعراض التحذيرية المبكرة لمرض السكري وكيفية الكشف عنه في مراحله الأولى.</div>
+        <div class="article-footer">
+          <span class="article-read">قراءة المقال ←</span>
+          <span class="article-date">منذ أسبوع</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SYMPTOM CHECKER -->
+<section id="symptoms">
+  <div class="symptoms-inner">
+    <div class="symptoms-title fade-up">
+      <div class="section-badge">🔍 فاحص الأعراض</div>
+      <h2>أعراضك تتحدث —<br>نساعدك تفهمها</h2>
+      <p>أدخل الأعراض التي تشعر بها واحصل على معلومات عامة عما قد تدل عليه. تذكر: هذا للتثقيف فقط.</p>
+      <div class="symptoms-list">
+        <div><span class="symptom-tag" onclick="addSymptom('صداع')">+ صداع</span></div>
+        <div><span class="symptom-tag" onclick="addSymptom('حمى')">+ حمى</span></div>
+        <div><span class="symptom-tag" onclick="addSymptom('سعال')">+ سعال</span></div>
+        <div><span class="symptom-tag" onclick="addSymptom('ألم في الصدر')">+ ألم في الصدر</span></div>
+        <div><span class="symptom-tag" onclick="addSymptom('تعب وإرهاق')">+ تعب وإرهاق</span></div>
+      </div>
+    </div>
+    <div class="symptoms-card fade-up">
+      <h3>📋 أضف أعراضك</h3>
+      <div class="sym-input-wrap">
+        <input class="sym-input" id="symInput" placeholder="اكتب عرضاً..." onkeydown="if(event.key==='Enter')addSymptomFromInput()" />
+      </div>
+      <div class="sym-tags" id="symTags"></div>
+      <button class="btn-white" onclick="checkSymptoms()">🔍 تحليل الأعراض مع المساعد</button>
+    </div>
+  </div>
+</section>
+ 
+<!-- قسم الأدوية الجديد -->
+<section class="medicine-section" id="medicines">
+  <h2 style="text-align: center;">الأدوية المتوفرة في المخزن</h2>
+  <div id="med-container" class="med-container">
+    <p style="text-align: center;">جاري تحميل الأدوية...</p>
+  </div>
+</section>
+
+<!-- DOCTORS CTA -->
+<section id="doctors">
+  <div class="doctors-inner fade-up">
+    <div class="doctors-text">
+      <div class="section-badge">🩺 استشارة حقيقية</div>
+      <h2>بعض الحالات تحتاج طبيباً حقيقياً</h2>
+      <p>المساعد الذكي مفيد للمعلومات العامة، لكن الفحص الطبي الحقيقي لا يُعوَّض. احجز استشارة مع طبيب متخصص الآن.</p>
+    </div>
+    <div class="doctors-btns">
+      <a href="tel:911" class="btn-green">🚨 طوارئ: 911</a>
+      <a href="#ai-chat" class="btn-outline">العودة للمساعد</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">صحتك<span>+</span></div>
+      <div class="footer-tagline">معلومات طبية موثوقة في متناول يدك</div>
+    </div>
+    <div class="footer-links">
+      <a href="#ai-chat">المساعد الطبي</a>
+      <a href="#topics">المواضيع</a>
+      <a href="#articles">المقالات</a>
+      <a href="#symptoms">فاحص الأعراض</a>
+    </div>
+  </div>
+  <div class="footer-disclaimer">
+    ⚠️ تنبيه قانوني: جميع المعلومات المقدمة في هذا الموقع هي للأغراض التثقيفية والمعلوماتية فقط، ولا تُعدّ بديلاً عن الاستشارة الطبية المتخصصة أو التشخيص أو العلاج الطبي. لا تتجاهل المشورة الطبية المتخصصة أو تتأخر في طلبها بسبب ما قرأته هنا.
+  </div>
+  <div class="footer-bottom" style="margin-top:1.5rem">
+    <span class="footer-copy">© 2025 صحتك+. جميع الحقوق محفوظة.</span>
+  </div>
+</footer>
+
+<script>
+// ─── CHAT LOGIC ───
+const symptoms = [];
+let isLoading = false;
+const conversationHistory = [];
+
+function getTime() {
+  return new Date().toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'});
+}
+
+function appendMessage(role, text) {
+  const container = document.getElementById('chatMessages');
+  const typing = document.getElementById('typingIndicator');
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const avatarContent = role === 'bot' ? '🩺' : 'أنت';
+  div.innerHTML = `
+    <div class="msg-avatar">${avatarContent}</div>
+    <div>
+      <div class="msg-bubble">${text.replace(/\n/g,'<br>')}</div>
+      <div class="msg-time">${getTime()}</div>
+    </div>`;
+
+  container.insertBefore(div, typing);
+  container.scrollTop = container.scrollHeight;
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const btn = document.getElementById('sendBtn');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+
+  input.value = '';
+  isLoading = true;
+  btn.disabled = true;
+
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+
+  const typing = document.getElementById('typingIndicator');
+  typing.classList.add('active');
+  document.getElementById('chatMessages').scrollTop = 99999;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `أنت مساعد طبي تثقيفي باللغة العربية على موقع "صحتك+". مهمتك تقديم معلومات طبية عامة وتثقيفية واضحة ومفيدة.
+
+قواعد صارمة:
+- قدم معلومات طبية عامة وموثوقة بأسلوب واضح وسهل الفهم
+- في بداية كل إجابة تتعلق بأعراض محددة، ذكّر المستخدم بجملة قصيرة أنك لا تقدم تشخيصاً
+- اذكر متى يجب استشارة الطبيب فوراً إن كانت الأعراض خطيرة
+- لا تعطِ جرعات أدوية محددة أو وصفات طبية
+- في حالات الطوارئ (ألم صدر شديد، صعوبة تنفس، فقدان وعي) أخبر المستخدم بالذهاب للطوارئ فوراً
+- اجعل إجاباتك منظمة وسهلة القراءة مع نقاط عند الحاجة
+- الطول المناسب: متوسط — لا قصير جداً ولا طويل جداً`,
+        messages: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || 'عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.';
+
+    conversationHistory.push({ role: 'assistant', content: reply });
+    typing.classList.remove('active');
+    appendMessage('bot', reply);
+
+  } catch (err) {
+    typing.classList.remove('active');
+    appendMessage('bot', 'عذراً، حدث خطأ في الاتصال. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
+  }
+
+  isLoading = false;
+  btn.disabled = false;
+  document.getElementById('chatInput').focus();
+}
+
+function sendQuick(btn) {
+  document.getElementById('chatInput').value = btn.textContent;
+  sendMessage();
+}
+
+function askTopic(topic) {
+  document.getElementById('chatInput').value = `أخبرني عن ${topic} - ما هي أبرز المعلومات المهمة؟`;
+  document.getElementById('ai-chat').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => sendMessage(), 500);
+}
+
+// ─── SYMPTOM CHECKER ───
+function addSymptom(sym) {
+  if (!symptoms.includes(sym) && symptoms.length < 8) {
+    symptoms.push(sym);
+    renderSymptoms();
+  }
+}
+function addSymptomFromInput() {
+  const val = document.getElementById('symInput').value.trim();
+  if (val) { addSymptom(val); document.getElementById('symInput').value = ''; }
+}
+function removeSymptom(i) {
+  symptoms.splice(i, 1);
+  renderSymptoms();
+}
+function renderSymptoms() {
+  const container = document.getElementById('symTags');
+  container.innerHTML = symptoms.map((s,i) =>
+    `<div class="sym-tag-item">${s}<span class="sym-remove" onclick="removeSymptom(${i})">✕</span></div>`
+  ).join('');
+}
+function checkSymptoms() {
+  if (!symptoms.length) { alert('يرجى إضافة عرض واحد على الأقل'); return; }
+  const q = `لديّ الأعراض التالية: ${symptoms.join('، ')}. ما المعلومات الطبية العامة عن هذه الأعراض وما الذي قد تدل عليه؟ ومتى يجب أن أزور الطبيب؟`;
+  document.getElementById('chatInput').value = q;
+  document.getElementById('ai-chat').scrollIntoView({behavior:'smooth'});
+  setTimeout(() => sendMessage(), 600);
+}
+
+// ─── ANIMATIONS ───
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      observer.unobserve(e.target);
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({behavior:'smooth'});
+  });
+});
+
+// دالة جلب الأدوية من السيرفر
+async function loadMedicines() {
+  try {
+    const container = document.getElementById('med-container');
+    const response = await fetch('https://medicine-9ayn.onrender.com/medicines');
+    const medicines = await response.json();
+        
+    container.innerHTML = ''; 
+    if(!Array.isArray(medicines) || medicines.length === 0) {
+      container.innerHTML = '<p style="text-align:center;">لا توجد أدوية حالياً في المخزن.</p>';
+      return;
+    }
+
+    medicines.forEach(med => {
+      const card = document.createElement('div');
+      card.className = 'med-card';
+      card.innerHTML = `
+        <h3>${med.name}</h3>
+        <p>السعر: ${med.price} د.أ</p>
+        <p>الكمية: ${med.stock}</p>
+      `;
+      container.appendChild(card);
+    });
+  } catch (error) {
+    console.error('تعذر جلب الأدوية:', error);
+    const el = document.getElementById('med-container');
+    if (el) el.innerHTML = '<p style="text-align:center;">خطأ في تحميل الأدوية.</p>';
+  }
+}
+// استدعاء عند تحميل الصفحة
+loadMedicines();
+</script>
+</body>
+</html>
