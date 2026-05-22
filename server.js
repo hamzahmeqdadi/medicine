@@ -1,34 +1,20 @@
 const express = require('express');
-const cors = require('cors');
-const pool = require('./db');
+const path = require('path'); // 1. أضف هذا السطر
 const app = express();
 
-app.use(express.json()); // ضروري لقراءة البيانات المرسلة
-app.use(cors());
+// 2. أضف هذا السطر لإخبار السيرفر بمكان ملفاتك (HTML, CSS, JS)
+app.use(express.static(__dirname));
 
-// 1. عرض كل الأدوية
-app.get('/medicines', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM medicines');
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// 3. أضف هذا المسار ليعرض ملف medical-site.html عند فتح الرابط الرئيسي
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'medical-site.html'));
 });
 
-// 2. إضافة دواء جديد
-app.post('/medicines', async (req, res) => {
-  const { name, price, stock } = req.body;
-  try {
-    const newMed = await pool.query(
-      'INSERT INTO medicines (name, price, stock) VALUES ($1, $2, $3) RETURNING *',
-      [name, price, stock]
-    );
-    res.json(newMed.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// ... تأكد من وجود مسار الأدوية هنا كما كان سابقاً
+app.get('/medicines', (req, res) => {
+    // كود جلب الأدوية من قاعدة البيانات
 });
 
+// اجعل السيرفر يستمع على البورت (أو بورت Render)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
