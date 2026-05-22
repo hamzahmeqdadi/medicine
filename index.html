@@ -765,31 +765,17 @@ async function sendMessage() {
 
   const typing = document.getElementById('typingIndicator');
   typing.classList.add('active');
-  document.getElementById('chatMessages').scrollTop = 99999;
 
   try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // الاتصال بسيرفرك الخاص وليس بـ Anthropic مباشرة
+    const response = await fetch('/ask-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `أنت مساعد طبي تثقيفي باللغة العربية على موقع "صحتك+". مهمتك تقديم معلومات طبية عامة وتثقيفية واضحة ومفيدة.
-
-قواعد صارمة:
-- قدم معلومات طبية عامة وموثوقة بأسلوب واضح وسهل الفهم
-- في بداية كل إجابة تتعلق بأعراض محددة، ذكّر المستخدم بجملة قصيرة أنك لا تقدم تشخيصاً
-- اذكر متى يجب استشارة الطبيب فوراً إن كانت الأعراض خطيرة
-- لا تعطِ جرعات أدوية محددة أو وصفات طبية
-- في حالات الطوارئ (ألم صدر شديد، صعوبة تنفس، فقدان وعي) أخبر المستخدم بالذهاب للطوارئ فوراً
-- اجعل إجاباتك منظمة وسهلة القراءة مع نقاط عند الحاجة
-- الطول المناسب: متوسط — لا قصير جداً ولا طويل جداً`,
-        messages: conversationHistory
-      })
+      body: JSON.stringify({ messages: conversationHistory })
     });
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text || 'عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.';
+    const reply = data.content?.[0]?.text || 'عذراً، حدث خطأ.';
 
     conversationHistory.push({ role: 'assistant', content: reply });
     typing.classList.remove('active');
@@ -797,12 +783,11 @@ async function sendMessage() {
 
   } catch (err) {
     typing.classList.remove('active');
-    appendMessage('bot', 'عذراً، حدث خطأ في الاتصال. يرجى التحقق من اتصالك والمحاولة مرة أخرى.');
+    appendMessage('bot', 'خطأ في الاتصال بالسيرفر.');
   }
 
   isLoading = false;
   btn.disabled = false;
-  document.getElementById('chatInput').focus();
 }
 
 function sendQuick(btn) {
