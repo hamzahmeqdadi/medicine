@@ -18,8 +18,9 @@ app.post('/ask-ai', async (req, res) => {
         const lastMessage = messages[messages.length - 1].content;
         
         // نستخدم الموديل القياسي والمباشر
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
-        
+
+// استبدل السطر القديم بهذا السطر الذي يستخدم الموديل الموحد
+const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_KEY}`;        
         const response = await axios.post(url, {
             contents: [{ parts: [{ text: "أنت مساعد طبي. " + lastMessage }] }]
         });
