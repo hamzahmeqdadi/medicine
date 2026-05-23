@@ -20,7 +20,7 @@ app.post('/ask-ai', async (req, res) => {
         // نستخدم الموديل القياسي والمباشر
 
 // استبدل السطر القديم بهذا السطر الذي يستخدم الموديل الموحد
-const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${GEMINI_KEY}`;        
+const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_KEY}`;        
         const response = await axios.post(url, {
             contents: [{ parts: [{ text: "أنت مساعد طبي. " + lastMessage }] }]
         });
