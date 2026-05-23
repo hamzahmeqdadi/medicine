@@ -27,7 +27,7 @@ app.post('/ask-ai', async (req, res) => {
         const lastMessage = messages[messages.length - 1].content;
         
         // استخدام رابط مستقر ومجرب لموديل gemini-1.5-flash
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`;
         
         const response = await axios.post(url, {
             contents: [{
