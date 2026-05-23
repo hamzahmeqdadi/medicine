@@ -10,30 +10,50 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 app.post('/ask-ai', async (req, res) => {
+    // جلب المفتاح من إعدادات البيئة (Render Environment Variables)
     const GEMINI_KEY = process.env.GEMINI_API_KEY;
-    if (!GEMINI_KEY) return res.status(500).json({ error: 'API Key missing' });
+    
+    if (!GEMINI_KEY) {
+        console.error('Error: API Key is missing in environment variables');
+        return res.status(500).json({ error: 'API Key missing' });
+    }
 
     try {
-        const messages = req.body.messages;
+        const { messages } = req.body;
+        if (!messages || messages.length === 0) {
+            return res.status(400).json({ error: 'No messages provided' });
+        }
+        
         const lastMessage = messages[messages.length - 1].content;
         
-        // نستخدم الموديل القياسي والمباشر
-
-// استبدل السطر القديم بهذا السطر الذي يستخدم الموديل الموحد
-const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${GEMINI_KEY}`;        
+        // استخدام رابط مستقر ومجرب لموديل gemini-1.5-flash
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+        
         const response = await axios.post(url, {
-            contents: [{ parts: [{ text: "أنت مساعد طبي. " + lastMessage }] }]
+            contents: [{
+                role: "user",
+                parts: [{ text: "أنت مساعد طبي ذكي. أجب على السؤال التالي بوضوح واختصار: " + lastMessage }]
+            }]
         });
 
-        // التأكد من وجود الرد قبل إرساله
-        const text = response.data.candidates[0].content.parts[0].text;
-        res.json({ content: [{ text: text }] });
+        // التأكد من أن الهيكل صحيح قبل استخراج النص
+        if (response.data && response.data.candidates && response.data.candidates[0].content) {
+            const text = response.data.candidates[0].content.parts[0].text;
+            res.json({ content: [{ text: text }] });
+        } else {
+            throw new Error('Invalid response structure from Gemini API');
+        }
 
     } catch (error) {
-        // طباعة تفاصيل الخطأ بدقة
-        console.error('Final Error Check:', error.response?.data?.error?.message || error.message);
-        res.status(500).json({ error: 'خطأ في الاتصال' });
+        // طباعة تفاصيل الخطأ في الـ Logs لتسهيل اكتشاف المشكلة
+        console.error('API Error Details:', error.response?.data?.error || error.message);
+        res.status(500).json({ error: 'خطأ في الاتصال بالذكاء الاصطناعي' });
     }
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
