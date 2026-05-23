@@ -9,7 +9,7 @@
     "db:migrate": "node scripts/migrate.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.27.0",
+    "@anthropic-ai/sdk": "^0.27.3",
     "@google/generative-ai": "^0.24.1",
     "axios": "^1.16.1",
     "bcryptjs": "^2.4.3",
